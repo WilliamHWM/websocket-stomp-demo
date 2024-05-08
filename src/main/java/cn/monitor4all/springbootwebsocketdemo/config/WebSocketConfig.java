@@ -1,12 +1,16 @@
 package cn.monitor4all.springbootwebsocketdemo.config;
 
+import com.alibaba.fastjson.support.spring.messaging.MappingFastJsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSocketMessageBroker
@@ -42,4 +46,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public UserInterceptor createUserInterceptor() {
         return new UserInterceptor();
     }
+    @Override
+    public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
+        messageConverters.add(mappingFastJsonMessageConverter());
+        return true;
+    }
+
+    @Bean
+    public MappingFastJsonMessageConverter mappingFastJsonMessageConverter(){
+        return new MappingFastJsonMessageConverter();
+    };
 }
